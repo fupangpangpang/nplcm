@@ -147,8 +147,8 @@ TPR_prior_set <- function(model_options,Mobs,Y,X=NULL){
                               alphaS.only <- rep(NA,JSS_only)
                               betaS.only  <- rep(NA,JSS_only)
                temp_cat_ind <- sapply(model_options$pathogen_SSonly_list,
-                                         function(path) {which(model_options$pathogen_cat$X==path)})
-                  temp_cat     <- model_options$pathogen_cat[temp_cat_ind,]
+                                         function(path) {which(model_options$pathogen_SSonly_cat$X==path)})
+                  temp_cat     <- model_options$pathogen_SSonly_cat[temp_cat_ind,]
                                 for (t in 1:JSS_only){
                                if (grepl("ENTRB",temp_cat$X[t]) | grepl("NMEN",temp_cat$X[t])){
                                   temp_param <- beta_parms_from_quantiles(c(.1,.5),p=c(0.025,.975),plot=FALSE)

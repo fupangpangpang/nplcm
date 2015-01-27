@@ -1,16 +1,16 @@
 How to install?
 --------------
 ```r
-install.packages(devtools)
+install.packages("devtools")
 devtools::install_github("zhenkewu/nplcm")
 ```
 
 Why should someone use `nplcm`?
 -------------------------------------
 
-- To study disease etiology from case-control data from multiple sources and have measurement errors. If you are interested in estimating population etiology pie (fraction), and the probability of each cause for individual case, try `nplcm`.
+- To study disease etiology from case-control data from multiple sources that have measurement errors. If you are interested in estimating the population etiology pie (fraction), and the probability of each cause for individual case, try `nplcm`.
 
-- Reference can be found [here](http://arxiv.org/abs/1411.5774).
+- Reference publication can be found [here](http://arxiv.org/abs/1411.5774).
 
 How does it compare to other existing solutions?
 ------------------------------------------------
@@ -34,5 +34,5 @@ Platform
   
     1. install X11 by going [here](http://xquartz.macosforge.org/trac/wiki/X112.7.7);
     
-    2. `install.packages("http://cran.r-project.org/src/contrib/rgl_0.95.1158.tar.gz",repo=NULL,type="source")`
+    2. `install.packages("http://download.r-forge.r-project.org/src/contrib/rgl_0.95.1200.tar.gz",repo=NULL,type="source")`
 

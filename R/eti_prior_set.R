@@ -15,31 +15,18 @@ eti_prior_set <- function(model_options){
         Jcause <- length(model_options$cause_list)
         cat("==Etiology priors: ==" ,"\n",model_options$Eti_prior,"\n")
         if (model_options$Eti_prior=="overall_uniform"){
-#                 if (is.null(model_options$SSonly)||model_options$SSonly==FALSE){
                   alpha    <-  rep(1,Jcause)
-#                 }else {
-#                   JSS_only <- length(model_options$pathogen_SSonly_list)
-#                   alpha    <-  rep(1,Jcause+JSS_only)
-#                 }
         }
 
         if (model_options$Eti_prior=="0_1"){
-#           if (is.null(model_options$SSonly)||model_options$SSonly==FALSE){
             alpha    <-  rep(.1,Jcause)
-#           }else {
-#             JSS_only <- length(model_options$pathogen_SSonly_list)
-#             alpha    <-  rep(.1,Jcause+JSS_only)
-#           }
         }
 		
         if (model_options$Eti_prior=="combo50"){
-#           if (is.null(model_options$SSonly)||model_options$SSonly==FALSE){
             alpha    <-  c(rep(.1,8),rep(.03,15),0.1)
-#           }else {
-#             JSS_only <- length(model_options$pathogen_SSonly_list)
-#             alpha    <-  rep(.1,Jcause+JSS_only)
-#           }
         }
+		
+		if 
 
 
         alpha

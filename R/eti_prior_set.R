@@ -25,9 +25,18 @@ eti_prior_set <- function(model_options){
         if (model_options$Eti_prior=="combo50"){
             alpha    <-  c(rep(.1,8),rep(.03,15),0.1)
         }
-		
-		if 
-
+		for (i in 1: Jcause){
+		nametwo = paste0("EPTwo",i)
+		namefour = paste0("EPFour",i)
+        if (model_options$Eti_prior==nametwo){
+                  alpha    <-  rep(.1,Jcause)
+				  alpha[i] = .2
+        }
+		if (model_options$Eti_prior==namefour){
+		  alpha    <-  rep(.1,Jcause)
+		  alpha[i] = .4
+		}
+		}
 
         alpha
 }

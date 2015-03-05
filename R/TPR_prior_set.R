@@ -78,17 +78,17 @@ TPR_prior_set <- function(model_options,Mobs,Y,X=NULL){
                   betaB  <- rep(NA,JBrS)
 
                   for (t in 1:nrow(temp_cat)){
-                    if (temp_cat$pathogen_type[t]=="B"){
+                    if (temp_cat$X[t]=="SASP"){
                       alphaB[t] <- 1
                       betaB[t]  <- 1
-                    }
-                    if (temp_cat$pathogen_type[t]=="V" | temp_cat$pathogen_type[t]=="F"){
+                    } else {
                       alphaB[t] <- 6
                       betaB[t]  <- 2
                     }
                   }
               }
 
+			  
               #need to define JSS here, which is the number of BrS+SS available
               # bacteria. It is not the same as the JSS used in nplcm_three_panel_plot.
               if (model_options$TPR_prior[2]=="noninformative"){
@@ -108,18 +108,83 @@ TPR_prior_set <- function(model_options,Mobs,Y,X=NULL){
                                          function(path) {which(model_options$pathogen_cat$X==path)})
                   temp_cat     <- model_options$pathogen_cat[temp_cat_ind,]
                   for (t in 1:JSS){
+                   if ((grepl("HINF",temp_cat$X[t])| grepl("PNEU",temp_cat$X[t]))& model_options$TPR=="NORMAL"){
+                      temp_param <- beta_parms_from_quantiles(c(.05,.2),p=c(0.025,.975),plot=FALSE)
+                      alphaS[t] <- temp_param$a
+                      betaS[t] <- temp_param$b
+                   } else if ((grepl("HINF",temp_cat$X[t])| grepl("PNEU",temp_cat$X[t]))& model_options$TPR=="SPECIAL"){
+                        temp_param <- beta_parms_from_quantiles(c(.1,.3),p=c(0.025,.975),plot=FALSE)
+                        alphaS[t] <- temp_param$a
+                        betaS[t] <- temp_param$b
+                   } else if (grepl("PNEU",temp_cat$X[t])& model_options$TPR=="LOW_PNEU_NORMAL"){
+                     temp_param <- beta_parms_from_quantiles(c(.025,.1),p=c(0.025,.975),plot=FALSE)
+                     alphaS[t] <- temp_param$a
+                     betaS[t] <- temp_param$b
+                   } else if ( grepl("PNEU",temp_cat$X[t])& model_options$TPR=="LOW_PNEU_SPECIAL"){
+                     temp_param <- beta_parms_from_quantiles(c(.05,.15),p=c(0.025,.975),plot=FALSE)
+                     alphaS[t] <- temp_param$a
+                     betaS[t] <- temp_param$b
+                   } else if (grepl("HINF",temp_cat$X[t])& model_options$TPR=="LOW_PNEU_NORMAL"){
+                     temp_param <- beta_parms_from_quantiles(c(.1,.3),p=c(0.025,.975),plot=FALSE)
+                     alphaS[t] <- temp_param$a
+                     betaS[t] <- temp_param$b
+                   } else if (grepl("HINF",temp_cat$X[t])& model_options$TPR=="LOW_PNEU_SPECIAL"){
+                     temp_param <- beta_parms_from_quantiles(c(.1,.3),p=c(0.025,.975),plot=FALSE)
+                     alphaS[t] <- temp_param$a
+                     betaS[t] <- temp_param$b
+                    }else if (grepl("MCAT",temp_cat$X[t])|grepl("SAUR",temp_cat$X[t])) {
                       temp_param <- beta_parms_from_quantiles(c(.05,.15),p=c(0.025,.975),plot=FALSE)
                       alphaS[t] <- temp_param$a
                       betaS[t] <- temp_param$b
+                    } else if (grepl("SASP",temp_cat$X[t])){
+                      temp_param <- beta_parms_from_quantiles(c(.10,.5),p=c(0.025,.975),plot=FALSE)
+                      alphaS[t] <- temp_param$a
+                      betaS[t] <- temp_param$b
+                    }
                   }
                   if (!is.null(model_options$pathogen_SSonly_list)){
                               JSS_only    <- length(model_options$pathogen_SSonly_list)
                               alphaS.only <- rep(NA,JSS_only)
                               betaS.only  <- rep(NA,JSS_only)
-                              for (t in 1:JSS_only){
-                                    temp_param_SSonly <- beta_parms_from_quantiles(c(.05,.15),p=c(0.025,.975),plot=FALSE)
-                                    alphaS.only[t] <- temp_param_SSonly$a
-                                    betaS.only[t] <- temp_param_SSonly$b
+               temp_cat_ind <- sapply(model_options$pathogen_SSonly_list,
+                                         function(path) {which(model_options$pathogen_SSonly_cat$X==path)})
+                  temp_cat     <- model_options$pathogen_SSonly_cat[temp_cat_ind,]
+                                for (t in 1:JSS_only){
+                               if (grepl("ENTRB",temp_cat$X[t]) | grepl("NMEN",temp_cat$X[t])){
+                                  temp_param <- beta_parms_from_quantiles(c(.1,.5),p=c(0.025,.975),plot=FALSE)
+                                  alphaS.only[t] <- temp_param$a
+                                  betaS.only[t] <- temp_param$b
+                                } else if (grepl("TB",temp_cat$X[t]) & model_options$site == 5){
+                                  temp_param <- beta_parms_from_quantiles(c(.1,.3),p=c(0.025,.975),plot=FALSE)
+                                  alphaS.only[t] <- temp_param$a
+                                  betaS.only[t] <- temp_param$b
+                                } else if (grepl("TB",temp_cat$X[t])){
+                                  temp_param <- beta_parms_from_quantiles(c(.1,.2),p=c(0.025,.975),plot=FALSE)
+                                  alphaS.only[t] <- temp_param$a
+                                  betaS.only[t] <- temp_param$b
+                                } else if ((grepl("HINF",temp_cat$X[t])| grepl("PNEU",temp_cat$X[t]))& model_options$TPR=="NORMAL"){
+                                  temp_param <- beta_parms_from_quantiles(c(.05,.2),p=c(0.025,.975),plot=FALSE)
+                                  alphaS.only[t] <- temp_param$a
+                                  betaS.only[t] <- temp_param$b
+                                } else if ((grepl("HINF",temp_cat$X[t])| grepl("PNEU",temp_cat$X[t]))& model_options$TPR=="SPECIAL"){
+                                    temp_param <- beta_parms_from_quantiles(c(.1,.3),p=c(0.025,.975),plot=FALSE)
+                                    alphaS.only[t] <- temp_param$a
+                                    betaS.only[t] <- temp_param$b
+                                }else if (grepl("MCAT",temp_cat$X[t])|grepl("SAUR",temp_cat$X[t])) {
+                                  temp_param <- beta_parms_from_quantiles(c(.05,.15),p=c(0.025,.975),plot=FALSE)
+                                  alphaS.only[t] <- temp_param$a
+                                  betaS.only[t] <- temp_param$b
+                                } else if (grepl("SASP",temp_cat$X[t])){
+                                  temp_param <- beta_parms_from_quantiles(c(.10,.5),p=c(0.025,.975),plot=FALSE)
+                                  alphaS.only[t] <- temp_param$a
+                                  betaS.only[t] <- temp_param$b
+                                } else {
+                                  temp_param <- beta_parms_from_quantiles(c(.05,.15),p=c(0.025,.975),plot=FALSE)
+                                  alphaS.only[t] <- temp_param$a
+                                  betaS.only[t] <- temp_param$b
+                                }
+
+
                               }
                   }
                }

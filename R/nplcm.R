@@ -24,8 +24,9 @@
 #' \item \code{MSS} a data frame of silver-standard (SS) measurements. 
 #' Rows are subjects, columns are pathogens (e.g. blood culture).
 #' These measurements have perfect specificity but imperfect sensitivity.
-#' \item \code{MGS} a data frame of gold-standard (GS) measurements. Rows are subject,
-#' columns are pathogens. These measurements have perfect sensitivity and specificity.
+#' \item \code{MGS} a data frame of gold-standard (GS) measurements. 
+#' Rows are subject, columns are pathogens. 
+#' These measurements have perfect sensitivity and specificity.
 #' }
 #'
 #' @param Y Vector of disease status: 1 for case, 0 for control.
@@ -135,11 +136,33 @@ nplcm <- function(Mobs,Y,X,model_options,mcmc_options){
               }
           }
     }
+  } else{
+      # if stratification or regression:
+      if (parsing$measurement$quality=="BrS+SS"){
+        if (!parsing$measurement$SSonly){
+          if (!parsing$measurement$nest){
+            stop("== Done but need to clean code. Please contact maintainer. Thanks.")
+          }else{
+            # model 2, DONE
+            res <- nplcm_fit_reg(Mobs,Y,X,model_options,mcmc_options)
+          }
+        } else{
+          if (!parsing$measurement$nest){
+            stop("== Done but need to clean code. Please contact maintainer. Thanks.")
+          }else{
+            # model 4, DONE
+            res <- nplcm_fit_reg(Mobs,Y,X,model_options,mcmc_options)
+          }
+        }
+      }else if (parsing$measurement$quality=="BrS"){
+        if (!parsing$measurement$SSonly){
+          if (!parsing$measurement$nest){
+            stop("== Done but need to clean code. Please contact maintainer. Thanks.")
+          }else{
+            stop("== Done but need to clean code. Please contact maintainer. Thanks.")
+          }
+        }
+      }
   }
-
-#   else{
-#     # with stratification or regression:
-#     res <- nplcm_fit_reg(Mobs,Y,X,model_options,mcmc_options)
-#   }
   res
 }
